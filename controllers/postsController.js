@@ -26,14 +26,21 @@ const index = (req, res) => {
 
 const show = (req, res) => {
   const id = parseInt(req.params.id);
-  const post = posts.find((post) => post.id === id);
+  const sql = `SELECT * FROM posts WHERE id = ?`;
+
+  connection.query(sql, [id], (err, results) => {
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    if (!results.length) res.status(404).json({ message: "Item not found" });
+    res.json(results);
+  });
+  /* const post = posts.find((post) => post.id === id);
   if (!post) {
     return res.status(404).json({
       error: "Not found",
       message: "Item not found",
     });
   }
-  res.json(post);
+  res.json(post); */
 };
 
 const store = (req, res) => {

@@ -1,7 +1,14 @@
 import { posts } from "../data/posts.js";
+import { connection } from "../data/db.js";
 
 const index = (req, res) => {
-  const queryTag = req.query.tags;
+  const sql = `SELECT * FROM posts`;
+  connection.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: "Database query failed" });
+    res.json(results);
+  });
+
+  /* const queryTag = req.query.tags;
 
   let filteredPosts = posts;
 
@@ -14,7 +21,7 @@ const index = (req, res) => {
   if (filteredPosts.length === 0) {
     return res.status(404).json({ message: "Item not found" });
   }
-  res.json(filteredPosts);
+  res.json(filteredPosts); */
 };
 
 const show = (req, res) => {
